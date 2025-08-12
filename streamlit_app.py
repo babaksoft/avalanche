@@ -10,7 +10,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize OpenAI client
-client = openai.OpenAI()
+api_key = st.secrets["API_KEY"]
+client = openai.OpenAI(api_key=api_key)
 
 
 # Helper function to get dataset path
@@ -55,7 +56,7 @@ with col1:
         try:
             csv_path = get_dataset_path()
             df = pd.read_csv(csv_path)
-            st.session_state["df"] = df.head(10)
+            st.session_state["df"] = df.sample(10, random_state=147)
             st.success("Dataset loaded successfully!")
         except FileNotFoundError:
             st.error("Dataset not found. Please check the file path.")
